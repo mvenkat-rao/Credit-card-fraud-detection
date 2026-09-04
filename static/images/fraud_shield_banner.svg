@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a192f"/>
+      <stop offset="40%" stop-color="#0f2b48"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="50%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="chipGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background Canvas with Deep Navy/Blue gradient -->
+  <rect width="1200" height="420" fill="url(#bgGrad)" rx="16"/>
+  
+  <!-- Subtle Grid Pattern -->
+  <g opacity="0.08" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="70" x2="1200" y2="70"/>
+    <line x1="0" y1="140" x2="1200" y2="140"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="280" x2="1200" y2="280"/>
+    <line x1="0" y1="350" x2="1200" y2="350"/>
+    
+    <line x1="100" y1="0" x2="100" y2="420"/>
+    <line x1="250" y1="0" x2="250" y2="420"/>
+    <line x1="400" y1="0" x2="400" y2="420"/>
+    <line x1="550" y1="0" x2="550" y2="420"/>
+    <line x1="700" y1="0" x2="700" y2="420"/>
+    <line x1="850" y1="0" x2="850" y2="420"/>
+    <line x1="1000" y1="0" x2="1000" y2="420"/>
+    <line x1="1150" y1="0" x2="1150" y2="420"/>
+  </g>
+
+  <!-- Left Content: Hero Text & Badges -->
+  <g transform="translate(70, 70)">
+    <!-- Security Badge -->
+    <rect width="260" height="34" rx="17" fill="#1e293b" stroke="#38bdf8" stroke-width="1" opacity="0.9"/>
+    <circle cx="20" cy="17" r="6" fill="#10b981" filter="url(#glow)"/>
+    <text x="36" y="22" font-family="sans-serif" font-size="12" font-weight="700" fill="#38bdf8" letter-spacing="1">
+      AI FRAUD PROTECTION ACTIVE
+    </text>
+
+    <!-- Main Title -->
+    <text x="0" y="85" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="38" font-weight="800" fill="#ffffff" letter-spacing="-0.5">
+      Credit Card Fraud Detection
+    </text>
+    <text x="0" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="500" fill="#93c5fd">
+      Real-Time Transaction Risk Engine &amp; Anomaly Classifier
+    </text>
+
+    <!-- Sub description -->
+    <text x="0" y="165" font-family="sans-serif" font-size="14" fill="#cbd5e1" width="550">
+      Utilizing ensemble Machine Learning algorithms: <tspan font-weight="700" fill="#38bdf8">Random Forest</tspan> &amp; <tspan font-weight="700" fill="#818cf8">Gradient Boosting</tspan>
+    </text>
+    <text x="0" y="190" font-family="sans-serif" font-size="14" fill="#94a3b8">
+      Trained on 30 PCA features with automated decision threshold probability calibration.
+    </text>
+
+    <!-- Key Metrics Pills -->
+    <g transform="translate(0, 220)">
+      <rect width="130" height="48" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1.2"/>
+      <text x="18" y="24" font-family="sans-serif" font-size="11" font-weight="600" fill="#94a3b8">ROC-AUC SCORE</text>
+      <text x="18" y="42" font-family="sans-serif" font-size="16" font-weight="800" fill="#38bdf8">99.8%</text>
+
+      <rect x="145" y="0" width="130" height="48" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1.2"/>
+      <text x="163" y="24" font-family="sans-serif" font-size="11" font-weight="600" fill="#94a3b8">FRAUD RECALL</text>
+      <text x="163" y="42" font-family="sans-serif" font-size="16" font-weight="800" fill="#34d399">94.2%</text>
+
+      <rect x="290" y="0" width="145" height="48" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1.2"/>
+      <text x="308" y="24" font-family="sans-serif" font-size="11" font-weight="600" fill="#94a3b8">LATENCY</text>
+      <text x="308" y="42" font-family="sans-serif" font-size="16" font-weight="800" fill="#fbbf24">&lt; 15 ms</text>
+    </g>
+  </g>
+
+  <!-- Right Visual: 3D Credit Card & Cyber Shield Artwork -->
+  <g transform="translate(730, 45)">
+    <!-- Shield Background Glow -->
+    <circle cx="210" cy="160" r="160" fill="#1d4ed8" opacity="0.25" filter="url(#glow)"/>
+
+    <!-- 3D Credit Card Vector -->
+    <g transform="rotate(-12, 180, 140)">
+      <rect x="20" y="30" width="310" height="190" rx="14" fill="url(#cardGrad)" stroke="#60a5fa" stroke-width="1.5" filter="url(#glow)"/>
+      
+      <!-- Card EMV Chip -->
+      <rect x="50" y="70" width="46" height="34" rx="6" fill="url(#chipGrad)" stroke="#f59e0b" stroke-width="1"/>
+      <line x1="50" y1="87" x2="96" y2="87" stroke="#78350f" stroke-width="0.8"/>
+      <line x1="73" y1="70" x2="73" y2="104" stroke="#78350f" stroke-width="0.8"/>
+
+      <!-- Contactless Wave Icon -->
+      <path d="M 115,75 A 12,12 0 0,1 115,99 M 122,70 A 18,18 0 0,1 122,104 M 129,65 A 24,24 0 0,1 129,109" fill="none" stroke="#e0f2fe" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- Card Digits Masked -->
+      <text x="50" y="145" font-family="monospace" font-size="17" font-weight="700" fill="#ffffff" letter-spacing="3">
+        •••• 4829 •••• 9104
+      </text>
+
+      <!-- Cardholder Name & Expiry -->
+      <text x="50" y="180" font-family="sans-serif" font-size="11" font-weight="700" fill="#cbd5e1" letter-spacing="1">
+        VERIFIED HOLDER
+      </text>
+      <text x="235" y="180" font-family="sans-serif" font-size="11" font-weight="700" fill="#cbd5e1">
+        12/28
+      </text>
+
+      <!-- Hologram Circle -->
+      <circle cx="280" cy="87" r="16" fill="#ec4899" opacity="0.8"/>
+      <circle cx="265" cy="87" r="16" fill="#f59e0b" opacity="0.8"/>
+    </g>
+
+    <!-- Floating Cyber Security Shield Icon -->
+    <g transform="translate(190, 110)">
+      <polygon points="50,10 95,28 95,75 50,115 5,75 5,28" fill="url(#shieldGrad)" stroke="#ffffff" stroke-width="2.5" filter="url(#glow)"/>
+      <!-- Shield Checkmark / Lock -->
+      <path d="M 32,60 L 45,73 L 70,45" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- Floating Live Alert Tag -->
+    <g transform="translate(30, 240)">
+      <rect width="210" height="42" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="1.5" opacity="0.95"/>
+      <circle cx="22" cy="21" r="5" fill="#10b981"/>
+      <text x="36" y="26" font-family="sans-serif" font-size="11" font-weight="700" fill="#34d399">ML DECISION: LEGITIMATE</text>
+    </g>
+  </g>
+</svg>

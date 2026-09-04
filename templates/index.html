@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credit Card Fraud Detection | Single Model &amp; Public Protection Engine</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💳</text></svg>">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js for Physical Graphs & Metrics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Master Stylesheet -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  
+  <style>
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* TOP VIBRANT BLUE HEADER NAVBAR */
+    .top-blue-header {
+      background: linear-gradient(135deg, #0284c7 0%, #1e40af 100%);
+      color: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 0.9rem 2rem;
+      box-shadow: 0 4px 20px rgba(2, 132, 199, 0.25);
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo-box {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.25rem;
+    }
+
+    .brand-logo-box .brand-badge {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .top-nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .top-nav-link {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .top-nav-link:hover {
+      color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .top-nav-link.active-pill {
+      background-color: #ffffff;
+      color: #1e40af;
+      font-weight: 700;
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .header-right-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-creditcard-diagram {
+      width: 140px;
+      height: 82px;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      padding: 8px 10px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s ease;
+    }
+
+    .header-creditcard-diagram:hover {
+      transform: translateY(-2px) scale(1.03);
+    }
+
+    .card-chip {
+      width: 22px;
+      height: 16px;
+      background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      border-radius: 3px;
+      border: 1px solid #d97706;
+      position: relative;
+    }
+
+    .card-chip::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #b45309;
+    }
+
+    .card-number-mini {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+      color: #e2e8f0;
+      font-weight: 700;
+    }
+
+    .card-holder-mini {
+      font-size: 0.55rem;
+      color: #94a3b8;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .card-brand-logo {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #38bdf8;
+      font-style: italic;
+    }
+
+    /* POSITIVE & NEGATIVE BUZZER BADGES */
+    .buzzer-box {
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-top: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      animation: pulseBuzzer 2s infinite ease-in-out;
+    }
+
+    .buzzer-positive {
+      background: #dcfce7;
+      border: 2px solid #22c55e;
+      color: #15803d;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    }
+
+    .buzzer-negative {
+      background: #fee2e2;
+      border: 2px solid #ef4444;
+      color: #b91c1c;
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+    }
+
+    @keyframes pulseBuzzer {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.015); }
+      100% { transform: scale(1); }
+    }
+
+    .summary-code-block {
+      background: #1e293b;
+      color: #f8fafc;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      padding: 1.25rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      border-left: 4px solid #38bdf8;
+    }
+
+    .feature-diagram-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      transition: all 0.3s ease;
+    }
+
+    .feature-diagram-card:hover {
+      border-color: #38bdf8;
+      box-shadow: 0 8px 25px rgba(2, 132, 199, 0.12);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       TOP VIBRANT BLUE HEADER NAVBAR
+       Includes: Credit Card Fraud Detection Name on Top & Credit Card Diagram on Right
+       ======================================================================== -->
+  <header class="top-blue-header">
+    <div class="header-inner">
+      
+      <!-- Brand Name on Top -->
+      <a href="#" class="brand-logo-box">
+        <span style="font-size: 1.6rem;">💳</span>
+        <div>
+          <div style="font-size: 1.25rem; font-weight: 800; letter-spacing: 0.5px;">Credit Card Fraud Detection</div>
+          <div style="font-size: 0.72rem; color: #7dd3fc; font-weight: 600;">ML Security Engine • PaySim &amp; Single Model Inspection</div>
+        </div>
+        <span class="brand-badge">PRO 2.0</span>
+      </a>
+
+      <!-- Navigation Menu -->
+      <nav>
+        <ul class="top-nav-menu">
+          <li><a href="#platformSection" class="top-nav-link">Platform</a></li>
+          <li><a href="#historySection" class="top-nav-link">History</a></li>
+          <li><a href="#algorithmsSection" class="top-nav-link">Algorithms</a></li>
+          <li><a href="#featuresSection" class="top-nav-link">Features</a></li>
+          <li><a href="#publicProtectionSection" class="top-nav-link">Public Protection</a></li>
+          <li>
+            <button type="button" class="top-nav-link active-pill trigger-about-modal" style="border:none; cursor:pointer;">
+              About
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Right Side: Credit Card Diagram & Operational Badge -->
+      <div class="header-right-card">
+        
+        <!-- Credit Card Diagram Image on Right -->
+        <div class="header-creditcard-diagram" title="Credit Card Chip Security Diagram">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="card-chip"></div>
+            <span style="color: #60a5fa; font-size: 0.75rem;">📡</span>
+          </div>
+          <div class="card-number-mini">•••• 9840</div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div class="card-holder-mini">A. VENKATESH</div>
+            <div class="card-brand-logo">VISA</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       MAIN CONTAINER
+       ======================================================================== -->
+  <main class="main-wrapper" style="padding-top: 2rem;">
+
+    <!-- Hero Banner with Credit Card Diagram Header Asset -->
+    <section style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; color: #ffffff; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);">
+      <div style="max-width: 600px;">
+        <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 20px; padding: 4px 14px; font-size: 0.8rem; font-weight: 700; margin-bottom: 1rem;">
+          <span>🛡️</span> REAL-TIME ANOMALY &amp; FRAUD DEFENSE
+        </div>
+        <h1 style="margin: 0 0 0.75rem 0; font-size: 2.1rem; font-weight: 800; line-height: 1.2;">
+          Credit Card Fraud Detection
+        </h1>
+        <p style="margin: 0; color: #94a3b8; font-size: 0.95rem; line-height: 1.6;">
+          Select between <b>Random Forest (99.81%)</b> or <b>Gradient Boosting (99.85%)</b> to evaluate single positive/negative fraud output, system flags ($200,000 threshold), and connected history logging.
+        </p>
+      </div>
+
+      <!-- Right Side Credit Card Practical Graphic Asset -->
+      <div style="width: 320px; text-align: center;">
+        <img src="/static/images/credit_card_diagram.png" alt="Credit Card Fraud Detection Diagram" style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2);">
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         1. PLATFORM SECTION (SINGLE MODEL SELECTION & INPUTS)
+         ======================================================================== -->
+    <section id="platformSection">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title"><span>🔍</span> Transaction Fraud Detection Platform</h2>
+          <p class="section-subtitle">Select your Machine Learning Algorithm to analyze single fraud output score and accuracy.</p>
+        </div>
+      </div>
+
+      <div class="predict-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+        
+        <!-- Left Panel: Input Features Form -->
+        <div class="input-panel" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.75rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+          
+          <h3 style="margin-top: 0; color: #0f172a; font-size: 1.25rem; font-weight: 800; border-bottom: 2px solid #f1f5f9; padding-bottom: 0.75rem;">
+            Input Features of The Transaction
+          </h3>
+
+          <form id="fraudForm">
+            
+            <!-- SINGLE ALGORITHM SELECTOR TOOL -->
+            <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 1rem; margin-bottom: 1.25rem;">
+              <label for="select_AlgorithmMode" style="display: block; font-weight: 800; color: #0369a1; margin-bottom: 0.5rem;">
+                🧠 Select Algorithm to Analyze (Single Model Output):
+              </label>
+              <select id="select_AlgorithmMode" class="select-custom" style="width: 100%; padding: 0.75rem; font-weight: 700; border-color: #0284c7;">
+                <option value="random_forest" selected>🌲 Random Forest Classifier (Single Analysis - 99.81% Accuracy)</option>
+                <option value="gradient_boosting">⚡ Gradient Boosting Classifier (Single Analysis - 99.85% Accuracy)</option>
+                <option value="ensemble_both">🧠 Dual Model Consensus (Both Models Combined)</option>
+              </select>
+            </div>
+
+            <!-- Sender ID -->
+            <div style="margin-bottom: 1.1rem;">
+              <label for="input_SenderID" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
+                Input Sender ID
+              </label>
+              <input type="text" id="input_SenderID" class="input-field" placeholder="e.g. C109845210" value="C109845210" required style="width: 100%; border-color: #f87171;">
+            </div>
+
+            <!-- Receiver ID -->
+            <div style="margin-bottom: 1.1rem;">
+              <label for="input_ReceiverID" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
+                Input Receiver ID
+              </label>
+              <input type="text" id="input_ReceiverID" class="input-field" placeholder="e.g. M849201948" value="M849201948" required style="width: 100%;">
+            </div>
+
+            <!-- Hours Slider -->
+            <div style="margin-bottom: 1.25rem;">
+              <label for="input_Hours" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
+                Number of Hours it took the Transaction to complete: <span id="hoursVal" style="color: #ef4444; font-weight: 800;">2</span>
+              </label>
+              <input type="range" id="input_Hours" min="0" max="720" value="2" style="width: 100%; accent-color: #ef4444;">
+            </div>
+
+            <!-- Type of Transfer Made -->
+            <div style="margin-bottom: 1.25rem;">
+              <label for="input_TransferType" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
+                Enter Type of Transfer Made:
+              </label>
+              <div style="font-size: 0.85rem; color: #64748b; margin-bottom: 0.5rem; line-height: 1.5;">
+                0 for 'Cash In' Transaction | 1 for 'Cash Out' | 2 for 'Debit' | 3 for 'Payment' | 4 for 'Transfer'
+              </div>
+              <select id="input_TransferType" class="select-custom" style="width: 100%; padding: 0.7rem;">
+                <option value="0">0 for 'Cash In' Transaction</option>
+                <option value="1">1 for 'Cash Out' Transaction</option>
+                <option value="2">2 for 'Debit' Transaction</option>
+                <option value="3" selected>3 for 'Payment' Transaction</option>
+                <option value="4">4 for 'Transfer' Transaction</option>
+              </select>
+            </div>
+
+            <!-- Amount in $ -->
+            <div style="margin-bottom: 1.1rem;">
+              <label for="input_Amount" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
+                Amount in $
+              </label>
+              <input type="number" id="input_Amount" class="input-field" step="0.01" value="64.50" required style="width: 100%;">
+            </div>
+
+            <!-- Sender Balance Before -->
+            <div style="margin-bottom: 1.1rem;">
+              <label for="input_SenderBalBefore" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
+                Sender Balance Before Transaction was made
+              </label>
+              <input type="number" id="input_SenderBalBefore" class="input-field" step="0.01" value="2500.00" required style="width: 100%;">
+            </div>
+
+            <!-- Sender Balance After -->
+            <div style="margin-bottom: 1.1rem;">
+              <label for="input_SenderBalAfter" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
+                Sender Balance After Transaction was made
+              </label>
+              <input type="number" id="input_SenderBalAfter" class="input-field" step="0.01" value="2435.50" required style="width: 100%;">
+            </div>
+
+            <!-- Recipient Balance Before -->
+            <div style="margin-bottom: 1.1rem;">
+              <label for="input_RecipientBalBefore" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
+                Recipient Balance Before Transaction was made
+              </label>
+              <input type="number" id="input_RecipientBalBefore" class="input-field" step="0.01" value="0.00" required style="width: 100%;">
+            </div>
+
+            <!-- Recipient Balance After -->
+            <div style="margin-bottom: 1.25rem;">
+              <label for="input_RecipientBalAfter" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
+                Recipient Balance After Transaction was made
+              </label>
+              <input type="number" id="input_RecipientBalAfter" class="input-field" step="0.01" value="64.50" required style="width: 100%;">
+            </div>
+
+            <!-- 1-Click Test Presets -->
+            <div class="preset-buttons" style="margin-bottom: 1.25rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="button" id="presetLegit" class="btn-preset preset-legit">
+                🛡️ Safe Sample ($64.50)
+              </button>
+              <button type="button" id="presetFraud" class="btn-preset preset-fraud">
+                🚨 Fraud Attack ($250,000)
+              </button>
+            </div>
+
+            <button type="submit" id="detectBtn" class="btn-detect" style="width: 100%; padding: 0.95rem; font-size: 1.05rem;">
+              ⚡ ANALYZE FRAUD WITH SELECTED MODEL
+            </button>
+          </form>
+
+        </div>
+
+        <!-- Right Panel: Single Summary Output & Buzzer Result -->
+        <div class="result-panel" id="resultPanel">
+          <div class="result-placeholder" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 2rem; text-align: center;">
+            <div class="placeholder-icon" style="font-size: 3rem; margin-bottom: 0.75rem;">🛡️</div>
+            <div class="placeholder-text" style="font-size: 1.2rem; font-weight: 800; color: #0f172a;">Ready for Transaction Inspection</div>
+            <div class="placeholder-sub" style="color: #64748b; margin-top: 0.5rem;">
+              Select an algorithm on the left (e.g. <b>Random Forest</b> or <b>Gradient Boosting</b>) and click <b>"ANALYZE FRAUD WITH SELECTED MODEL"</b> to see single positive/negative result.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         2. HISTORY SECTION (RECORDED DATASET HISTORY LOG)
+         ======================================================================== -->
+    <section id="historySection" style="margin-top: 3.5rem;">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title"><span>📜</span> History — Connected Dataset Detection Logs</h2>
+          <p class="section-subtitle">Real-time history table storing member transactions, system flags, algorithm probability scores, and positive/negative status.</p>
+        </div>
+        <div>
+          <button type="button" id="clearHistoryBtn" class="btn-preset" style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5;">
+            🗑️ Clear History Log
+          </button>
+        </div>
+      </div>
+
+      <div class="metrics-table-card" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.25rem; overflow-x: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+        <table class="custom-table" style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="background: #f8fafc; text-align: left; font-size: 0.85rem; color: #475569;">
+              <th style="padding: 10px;">ID</th>
+              <th style="padding: 10px;">Sender ID</th>
+              <th style="padding: 10px;">Receiver ID</th>
+              <th style="padding: 10px;">Type</th>
+              <th style="padding: 10px;">Amount ($)</th>
+              <th style="padding: 10px;">Sender Balances</th>
+              <th style="padding: 10px;">Recipient Balances</th>
+              <th style="padding: 10px;">System Flag (>$200k)</th>
+              <th style="padding: 10px;">Random Forest %</th>
+              <th style="padding: 10px;">Boosting %</th>
+              <th style="padding: 10px;">Detection Result Status</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <!-- Dynamically populated from /api/history -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         3. ALGORITHMS SECTION (PHYSICAL DIAGRAMS & COMPARISON GRAPHS)
+         ======================================================================== -->
+    <section id="algorithmsSection" style="margin-top: 3.5rem;">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title"><span>📊</span> Algorithms — Random Forest vs Boosting Engine</h2>
+          <p class="section-subtitle">Deep dive into Random Forest (Bagging Ensemble) and Gradient Boosting (Boosting Optimization) with physical performance graphs.</p>
+        </div>
+      </div>
+
+      <!-- Diagrams & Graphs Grid -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem; margin-bottom: 2rem;">
+        
+        <!-- Graph 1: Performance Metric Bar Comparison -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+          <h4 style="margin-top:0; color: #0f172a;">📊 Performance Metric Bar Chart</h4>
+          <p style="font-size: 0.85rem; color: #64748b;">Comparing Accuracy, Precision, Recall, F1-Score, and ROC-AUC</p>
+          <div style="height: 280px; position: relative;">
+            <canvas id="algoMetricChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Graph 2: ROC Curve Discrimination Chart -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+          <h4 style="margin-top:0; color: #0f172a;">📈 ROC Curve Discrimination Graph</h4>
+          <p style="font-size: 0.85rem; color: #64748b;">True Positive Rate (Recall) vs False Positive Rate curve</p>
+          <div style="height: 280px; position: relative;">
+            <canvas id="algoRocChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================
+         4. FEATURES WORK SECTION (PRACTICAL DIAGRAMS)
+         ======================================================================== -->
+    <section id="featuresSection" style="margin-top: 3.5rem; margin-bottom: 2rem;">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title"><span>⚙️</span> Features Work — Practical Feature Engineering Diagrams &amp; Data Pipeline</h2>
+          <p class="section-subtitle">Physical architectural diagrams and visual illustrations demonstrating how Credit Card Fraud Detection feature work is processed step-by-step.</p>
+        </div>
+      </div>
+
+      <!-- Feature Engineering Architecture Practical Diagram Asset -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 2rem; text-align: center;">
+        <h4 style="margin-top:0; color: #0f172a; text-align: left;">🖼️ Feature Work Infographic Pipeline Diagram</h4>
+        <img src="/static/images/feature_work_diagram.png" alt="Credit Card Feature Work Diagram" style="max-width: 100%; height: auto; border-radius: 10px; border: 1px solid #cbd5e1;">
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+        
+        <!-- Diagram 1: Balance Delta Feature Work -->
+        <div class="feature-diagram-card">
+          <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">1️⃣ Balance Delta Work</div>
+          <h5 style="margin: 0 0 0.5rem 0; color: #0f172a; font-weight: 800; font-size: 1.05rem;">OrgDelta &amp; DestDelta Analysis</h5>
+          <p style="font-size: 0.88rem; color: #64748b; line-height: 1.5;">
+            Calculates balance discrepancy equations: <br>
+            <code>OrgDelta = OldBalanceOrg - NewBalanceOrig - Amount</code><br>
+            Zero remaining destination balances on high transfers signal stolen card compromise.
+          </p>
+        </div>
+
+        <!-- Diagram 2: EMV Chip & Encrypted Token Feature Extraction -->
+        <div class="feature-diagram-card">
+          <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">2️⃣ EMV Chip Security Work</div>
+          <h5 style="margin: 0 0 0.5rem 0; color: #0f172a; font-weight: 800; font-size: 1.05rem;">Chip Token Signal Processing</h5>
+          <p style="font-size: 0.88rem; color: #64748b; line-height: 1.5;">
+            Extracts POS terminal microchip crypto tokens, cardholder Sender ID / Receiver ID signatures, and verifies cryptographic authorization hashes.
+          </p>
+        </div>
+
+        <!-- Diagram 3: One-Hot Transfer Encoding & System Flag -->
+        <div class="feature-diagram-card">
+          <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">3️⃣ One-Hot &amp; System Flag</div>
+          <h5 style="margin: 0 0 0.5rem 0; color: #0f172a; font-weight: 800; font-size: 1.05rem;">Categorical &amp; Threshold Work</h5>
+          <p style="font-size: 0.88rem; color: #64748b; line-height: 1.5;">
+            Converts 5 transfer types into one-hot binary vectors (`Cash Out`, `Transfer`). Triggers `System Flag = 1` whenever transaction exceeds `$200,000`.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         5. HOW IT HELPS THE PUBLIC & HOW TO STOP FRAUDS (PRACTICAL DIAGRAMS)
+         ======================================================================== -->
+    <section id="publicProtectionSection" style="margin-top: 3.5rem; margin-bottom: 3.5rem;">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title"><span>🛡️</span> How Credit Card Fraud Detection Helps the Public &amp; How to Stop Frauds</h2>
+          <p class="section-subtitle">Practical protection mechanisms, automated card locks, and physical security safeguards protecting cardholders from financial fraud.</p>
+        </div>
+      </div>
+
+      <!-- Stop Fraud Practical Infographic Diagram -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 2rem; text-align: center;">
+        <h4 style="margin-top:0; color: #0f172a; text-align: left;">🖼️ Public Fraud Prevention &amp; Security Protocol Diagram</h4>
+        <img src="/static/images/stop_fraud_diagram.png" alt="How to Stop Credit Card Fraud Diagram" style="max-width: 100%; height: auto; border-radius: 10px; border: 1px solid #cbd5e1;">
+      </div>
+
+      <!-- 4 Practical Public Protection Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+        
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">📲</div>
+          <h4 style="margin: 0 0 0.5rem 0; color: #0f172a;">1. Real-Time 2FA OTP &amp; Instant Card Lock</h4>
+          <p style="font-size: 0.88rem; color: #64748b; line-height: 1.6;">
+            When ML models flag a transaction as <code>NEGATIVE: FRAUD DETECTED</code>, the system dispatches an instant SMS OTP code and temporarily locks the card before money is debited.
+          </p>
+        </div>
+
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">💳</div>
+          <h4 style="margin: 0 0 0.5rem 0; color: #0f172a;">2. EMV Chip Encrypted Dynamic Cryptograms</h4>
+          <p style="font-size: 0.88rem; color: #64748b; line-height: 1.6;">
+            Replaces old magnetic stripe skimming vulnerabilities with EMV microchip dynamic cryptograms, preventing card cloning at ATMs or retail POS terminals.
+          </p>
+        </div>
+
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌐</div>
+          <h4 style="margin: 0 0 0.5rem 0; color: #0f172a;">3. Merchant Risk Profiling &amp; Anti-Phishing</h4>
+          <p style="font-size: 0.88rem; color: #64748b; line-height: 1.6;">
+            Scores foreign online gateways and malicious e-commerce portals in under 15 milliseconds, blocking card harvesting on fake phishing websites.
+          </p>
+        </div>
+
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+          <div style="font-size: 2rem; margin-bottom: 0.5rem;">📊</div>
+          <h4 style="margin: 0 0 0.5rem 0; color: #0f172a;">4. Micro-transaction Behavioral Profiling</h4>
+          <p style="font-size: 0.88rem; color: #64748b; line-height: 1.6;">
+            Detects stolen card testing patterns where fraudsters attempt tiny $1.00 authorizations before making massive $250,000 wire transfers.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       6. ABOUT MODAL (DEVELOPER & TEAM DETAILS)
+       ======================================================================== -->
+  <div class="modal-backdrop" id="aboutModal">
+    <div class="modal-dialog" style="background: #ffffff;">
+      <div class="modal-top-header">
+        <h3><span>👥</span> About Credit Card &amp; Financial Fraud Detection</h3>
+        <button type="button" class="modal-close-btn" id="closeAboutModal">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        
+        <div class="location-tag">
+          <span>📍</span> Location: <b>Vadodara, Gujarat</b>
+        </div>
+
+        <div class="team-profile-container">
+          <div class="team-leader-card">
+            <div class="leader-avatar">AV</div>
+            <div class="leader-info">
+              <h4>Ambati Venkatesh</h4>
+              <span class="role-badge">Team Leader &amp; ML Architecture Lead</span>
+            </div>
+          </div>
+
+          <div class="members-grid">
+            <div class="member-card">
+              <div class="member-avatar">MV</div>
+              <div class="member-info">
+                <h5>Mallapuram Venkatarao</h5>
+                <p>Team Member / ML Engineering</p>
+              </div>
+            </div>
+
+            <div class="member-card">
+              <div class="member-avatar">NR</div>
+              <div class="member-info">
+                <h5>Nunavath Ramesh</h5>
+                <p>Team Member / Data Preprocessing</p>
+              </div>
+            </div>
+
+            <div class="member-card">
+              <div class="member-avatar">V</div>
+              <div class="member-info">
+                <h5>Vineeth</h5>
+                <p>Team Member / History &amp; Evaluation</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-text-content">
+          <h4>Project Summary</h4>
+          <p>
+            An advanced single-model and ensemble fraud detection platform engineered with <b>Random Forest Classifier</b> and <b>Gradient Boosting (Boosting)</b> to identify fraudulent financial transactions in real-time.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer-container" style="background: #0f172a; color: #ffffff;">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand" style="color: #ffffff;">Credit Card <span>Fraud Detection</span></div>
+        <div class="footer-credits">
+          Team Leader: <b>Ambati Venkatesh</b> | Members: <b>Mallapuram Venkatarao, Nunavath Ramesh, Vineeth</b>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>Developed in <b>Vadodara, Gujarat</b> • Single Model Analysis Edition</div>
+        <div>Running on Localhost: <code>http://127.0.0.1:5000</code></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main JS Script -->
+  <script src="/static/js/main.js"></script>
+</body>
+</html>

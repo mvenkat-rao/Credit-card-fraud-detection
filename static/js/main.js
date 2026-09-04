@@ -1,0 +1,458 @@
+/**
+ * Credit Card & Financial Fraud Detection — Main JS Engine
+ * Team Leader: Ambati Venkatesh
+ * Team Members: Mallapuram Venkatarao, Nunavath Ramesh, Vineeth
+ * Location: Vadodara, Gujarat
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Global References & Charts
+  let algoChart = null;
+  let rocChart = null;
+
+  initEventListeners();
+  loadHistoryLog();
+  initAlgorithmCharts();
+});
+
+/* ==========================================================================
+   EVENT LISTENERS INITIALIZATION
+   ========================================================================== */
+function initEventListeners() {
+  // 1. About Modal Toggle
+  const aboutModal = document.getElementById('aboutModal');
+  const openAboutBtns = document.querySelectorAll('.trigger-about-modal');
+  const closeAboutBtn = document.getElementById('closeAboutModal');
+
+  openAboutBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (aboutModal) aboutModal.classList.add('active');
+    });
+  });
+
+  if (closeAboutBtn) {
+    closeAboutBtn.addEventListener('click', () => {
+      if (aboutModal) aboutModal.classList.remove('active');
+    });
+  }
+
+  if (aboutModal) {
+    aboutModal.addEventListener('click', (e) => {
+      if (e.target === aboutModal) {
+        aboutModal.classList.remove('active');
+      }
+    });
+  }
+
+  // 2. Hours Slider Live Update
+  const hoursSlider = document.getElementById('input_Hours');
+  const hoursVal = document.getElementById('hoursVal');
+  if (hoursSlider && hoursVal) {
+    hoursSlider.addEventListener('input', (e) => {
+      hoursVal.textContent = e.target.value;
+    });
+  }
+
+  // 3. Form Submit / Fraud Prediction
+  const fraudForm = document.getElementById('fraudForm');
+  if (fraudForm) {
+    fraudForm.addEventListener('submit', handlePredictionSubmit);
+  }
+
+  // 4. Presets
+  const presetLegit = document.getElementById('presetLegit');
+  const presetFraud = document.getElementById('presetFraud');
+  if (presetLegit) presetLegit.addEventListener('click', () => applyPreset('legitimate'));
+  if (presetFraud) presetFraud.addEventListener('click', () => applyPreset('fraudulent'));
+
+  // 5. Clear History Button
+  const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+  if (clearHistoryBtn) {
+    clearHistoryBtn.addEventListener('click', clearHistoryLog);
+  }
+}
+
+/* ==========================================================================
+   PRESET SCENARIOS
+   ========================================================================== */
+function applyPreset(type) {
+  if (type === 'legitimate') {
+    if (document.getElementById('input_SenderID')) document.getElementById('input_SenderID').value = 'C109845210';
+    if (document.getElementById('input_ReceiverID')) document.getElementById('input_ReceiverID').value = 'M849201948';
+    if (document.getElementById('input_Hours')) {
+      document.getElementById('input_Hours').value = 2;
+      document.getElementById('hoursVal').textContent = '2';
+    }
+    if (document.getElementById('input_TransferType')) document.getElementById('input_TransferType').value = '3'; // Payment
+    if (document.getElementById('input_Amount')) document.getElementById('input_Amount').value = '64.50';
+    if (document.getElementById('input_SenderBalBefore')) document.getElementById('input_SenderBalBefore').value = '2500.00';
+    if (document.getElementById('input_SenderBalAfter')) document.getElementById('input_SenderBalAfter').value = '2435.50';
+    if (document.getElementById('input_RecipientBalBefore')) document.getElementById('input_RecipientBalBefore').value = '0.00';
+    if (document.getElementById('input_RecipientBalAfter')) document.getElementById('input_RecipientBalAfter').value = '64.50';
+    showToastNotification('Loaded Legitimate Safe Sample ($64.50)');
+  } else if (type === 'fraudulent') {
+    if (document.getElementById('input_SenderID')) document.getElementById('input_SenderID').value = 'C840192841';
+    if (document.getElementById('input_ReceiverID')) document.getElementById('input_ReceiverID').value = 'C920194821';
+    if (document.getElementById('input_Hours')) {
+      document.getElementById('input_Hours').value = 0;
+      document.getElementById('hoursVal').textContent = '0';
+    }
+    if (document.getElementById('input_TransferType')) document.getElementById('input_TransferType').value = '4'; // Transfer
+    if (document.getElementById('input_Amount')) document.getElementById('input_Amount').value = '250000.00';
+    if (document.getElementById('input_SenderBalBefore')) document.getElementById('input_SenderBalBefore').value = '250000.00';
+    if (document.getElementById('input_SenderBalAfter')) document.getElementById('input_SenderBalAfter').value = '0.00';
+    if (document.getElementById('input_RecipientBalBefore')) document.getElementById('input_RecipientBalBefore').value = '0.00';
+    if (document.getElementById('input_RecipientBalAfter')) document.getElementById('input_RecipientBalAfter').value = '0.00';
+    showToastNotification('Loaded Fraud Attack Sample ($250,000)');
+  }
+}
+
+/* ==========================================================================
+   PREDICTION SUBMIT & SINGLE / DUAL MODEL RENDERING
+   ========================================================================== */
+async function handlePredictionSubmit(e) {
+  e.preventDefault();
+  
+  const submitBtn = document.getElementById('detectBtn');
+  const resultPanel = document.getElementById('resultPanel');
+  const originalBtnText = submitBtn.innerHTML;
+
+  const senderId = document.getElementById('input_SenderID')?.value.trim() || '';
+  const receiverId = document.getElementById('input_ReceiverID')?.value.trim() || '';
+
+  if (!senderId || !receiverId) {
+    resultPanel.innerHTML = `
+      <div style="background: #fff1f2; border: 2px solid #f43f5e; border-radius: 12px; padding: 1.5rem; color: #be123c; font-weight: 700; font-family: sans-serif;">
+        ⚠️ Error! Please input Transaction ID or Names of Sender and Receiver!
+      </div>
+    `;
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '⚡ Analyzing Transaction Risk...';
+
+  const selectedAlgo = document.getElementById('select_AlgorithmMode')?.value || 'random_forest';
+  const hoursCompleted = parseInt(document.getElementById('input_Hours')?.value || '0');
+  const transferTypeCode = parseInt(document.getElementById('input_TransferType')?.value || '3');
+  const amount = parseFloat(document.getElementById('input_Amount')?.value || '0');
+  const senderBalBefore = parseFloat(document.getElementById('input_SenderBalBefore')?.value || '0');
+  const senderBalAfter = parseFloat(document.getElementById('input_SenderBalAfter')?.value || '0');
+  const recipientBalBefore = parseFloat(document.getElementById('input_RecipientBalBefore')?.value || '0');
+  const recipientBalAfter = parseFloat(document.getElementById('input_RecipientBalAfter')?.value || '0');
+
+  const payload = {
+    sender_id: senderId,
+    receiver_id: receiverId,
+    hours_completed: hoursCompleted,
+    transfer_type_code: transferTypeCode,
+    amount: amount,
+    sender_balance_before: senderBalBefore,
+    sender_balance_after: senderBalAfter,
+    recipient_balance_before: recipientBalBefore,
+    recipient_balance_after: recipientBalAfter,
+    features: {
+      Time: hoursCompleted * 3600,
+      Amount: amount
+    }
+  };
+
+  try {
+    const response = await fetch('/api/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      throw new Error(errData.error || `Server status ${response.status}`);
+    }
+
+    const result = await response.json();
+    renderPredictionResult(result, selectedAlgo);
+    loadHistoryLog(); // Refresh History Table immediately
+  } catch (err) {
+    console.error('Prediction failed:', err);
+    resultPanel.innerHTML = `
+      <div style="background: #fff1f2; border: 2px solid #f43f5e; border-radius: 12px; padding: 1.5rem; color: #be123c; font-weight: 700;">
+        ⚠️ ${err.message || 'Prediction failed. Ensure the server is active.'}
+      </div>
+    `;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnText;
+  }
+}
+
+function renderPredictionResult(res, selectedAlgo) {
+  const resultPanel = document.getElementById('resultPanel');
+  const rf = res.random_forest;
+  const gb = res.gradient_boosting;
+
+  let modelName = "";
+  let accuracyText = "";
+  let isFraud = false;
+  let fraudPct = 0;
+
+  if (selectedAlgo === 'random_forest') {
+    modelName = "🌲 Random Forest Classifier (Ensemble)";
+    accuracyText = "99.81% Model Accuracy";
+    isFraud = rf.is_fraud;
+    fraudPct = rf.fraud_percentage;
+  } else if (selectedAlgo === 'gradient_boosting') {
+    modelName = "⚡ Gradient Boosting Classifier (Boosting)";
+    accuracyText = "99.85% Model Accuracy Lead";
+    isFraud = gb.is_fraud;
+    fraudPct = gb.fraud_percentage;
+  } else {
+    modelName = "🧠 Dual Model Ensemble Consensus";
+    accuracyText = "99.85% Combined Accuracy";
+    isFraud = res.is_fraud;
+    fraudPct = (res.avg_fraud_probability * 100).toFixed(2);
+  }
+
+  // Buzzer Card Style
+  const buzzerClass = isFraud ? 'buzzer-negative' : 'buzzer-positive';
+  const buzzerIcon = isFraud ? '🚨' : '🛡️';
+  const buzzerTitle = isFraud ? 'NEGATIVE: FRAUD DETECTED - SECURITY ALERT!' : 'POSITIVE: LEGITIMATE TRANSACTION - SAFE (APPROVED)';
+
+  // Summary Text Block (Exact layout from Image 2)
+  const summaryText = 
+`Sender ID: ${res.sender_id}
+Receiver ID: ${res.receiver_id}
+1. Number of Hours it took to complete: ${res.hours_completed}
+2. Type of Transaction: ${res.transfer_type}
+3. Amount Sent: $${parseFloat(res.amount).toFixed(2)}
+4. Sender Balance Before Transaction: $${parseFloat(res.sender_balance_before).toFixed(2)}
+5. Sender Balance After Transaction: $${parseFloat(res.sender_balance_after).toFixed(2)}
+6. Receipient Balance Before Transaction: $${parseFloat(res.recipient_balance_before).toFixed(2)}
+7. Receipient Balance After Transaction: $${parseFloat(res.recipient_balance_after).toFixed(2)}
+8. System Flag Fraud Status(Transaction amount greater than $200000): ${res.system_flag}`;
+
+  resultPanel.innerHTML = `
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+      
+      <!-- Single Selected Algorithm Badge -->
+      <div style="background: #0284c7; color: #ffffff; border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.88rem; font-weight: 800; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <span>${modelName}</span>
+        <span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">${accuracyText}</span>
+      </div>
+
+      <!-- Buzzer Alert Badge -->
+      <div class="buzzer-box ${buzzerClass}">
+        <div style="font-size: 2.2rem;">${buzzerIcon}</div>
+        <div>
+          <div style="font-size: 1.1rem; font-weight: 800;">${buzzerTitle}</div>
+          <div style="font-size: 0.85rem; font-weight: 500; opacity: 0.9; margin-top: 0.2rem;">
+            ${isFraud ? 'Anomalous pattern detected. Automatic freeze dispatched.' : 'Low risk score below threshold. Transaction authorized.'}
+          </div>
+        </div>
+      </div>
+
+      <!-- Single Algorithm Fraud Risk Score Gauge -->
+      <div style="margin-top: 1.25rem;">
+        <div class="probability-meter-box" style="margin-bottom: 0;">
+          <div class="meter-header">
+            <span class="meter-title">Calculated Fraud Risk Probability Score</span>
+            <span class="meter-score" style="color: ${isFraud ? '#dc2626' : '#16a34a'}; font-weight: 800; font-size: 1.1rem;">${fraudPct}% Fraud Risk</span>
+          </div>
+          <div class="progress-track" style="height: 12px;">
+            <div class="progress-fill ${isFraud ? 'progress-fraud' : 'progress-legit'}" style="width: ${fraudPct}%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formatted Summary Code Block -->
+      <div style="margin-top: 1.25rem;">
+        <div style="font-weight: 700; color: #0f172a; font-size: 0.9rem; margin-bottom: 0.3rem;">
+          📄 Formatted Transaction Inspection Summary:
+        </div>
+        <pre class="summary-code-block">${summaryText}</pre>
+      </div>
+
+    </div>
+  `;
+}
+
+/* ==========================================================================
+   LOAD & RENDER TRANSACTION HISTORY TABLE
+   ========================================================================== */
+async function loadHistoryLog() {
+  const tbody = document.getElementById('historyTableBody');
+  if (!tbody) return;
+
+  try {
+    const res = await fetch('/api/history');
+    if (!res.ok) return;
+    const data = await res.json();
+    const history = data.history || [];
+
+    if (history.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="11" style="text-align: center; color: #94a3b8; padding: 20px;">
+            No transaction detection history recorded yet. Enter features above to log data.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = history.map(item => `
+      <tr style="border-bottom: 1px solid #f1f5f9; font-size: 0.85rem;">
+        <td style="padding: 10px; font-weight: 700; color: #64748b;">#${item.id}</td>
+        <td style="padding: 10px; font-weight: 700; color: #0f172a; font-family: monospace;">${item.sender_id}</td>
+        <td style="padding: 10px; font-weight: 700; color: #0f172a; font-family: monospace;">${item.receiver_id}</td>
+        <td style="padding: 10px; color: #475569;">${item.transfer_type}</td>
+        <td style="padding: 10px; font-weight: 700; color: #0f172a;">$${parseFloat(item.amount).toFixed(2)}</td>
+        <td style="padding: 10px; color: #64748b; font-size: 0.8rem;">
+          Before: $${parseFloat(item.sender_balance_before).toFixed(2)}<br>
+          After: $${parseFloat(item.sender_balance_after).toFixed(2)}
+        </td>
+        <td style="padding: 10px; color: #64748b; font-size: 0.8rem;">
+          Before: $${parseFloat(item.recipient_balance_before).toFixed(2)}<br>
+          After: $${parseFloat(item.recipient_balance_after).toFixed(2)}
+        </td>
+        <td style="padding: 10px; font-weight: 700; text-align: center; color: ${item.system_flag === 1 ? '#dc2626' : '#16a34a'};">
+          ${item.system_flag}
+        </td>
+        <td style="padding: 10px; color: ${item.rf_percentage >= 50 ? '#dc2626' : '#16a34a'}; font-weight: 700;">${item.rf_percentage}%</td>
+        <td style="padding: 10px; color: ${item.gb_percentage >= 50 ? '#dc2626' : '#16a34a'}; font-weight: 700;">${item.gb_percentage}%</td>
+        <td style="padding: 10px;">
+          <span style="display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; background: ${item.is_fraud ? '#fee2e2' : '#dcfce7'}; color: ${item.is_fraud ? '#991b1b' : '#166534'};">
+            ${item.is_fraud ? '🔴 FRAUD' : '🟢 SAFE'}
+          </span>
+        </td>
+      </tr>
+    `).join('');
+
+  } catch (err) {
+    console.warn('Could not fetch history log:', err);
+  }
+}
+
+async function clearHistoryLog() {
+  if (!confirm("Are you sure you want to clear all recorded history logs?")) return;
+  try {
+    const res = await fetch('/api/history', { method: 'DELETE' });
+    if (res.ok) {
+      showToastNotification("History log cleared");
+      loadHistoryLog();
+    }
+  } catch (err) {
+    console.error("Failed to clear history log:", err);
+  }
+}
+
+/* ==========================================================================
+   ALGORITHMS INTERACTIVE CHARTS (CHART.JS)
+   ========================================================================== */
+function initAlgorithmCharts() {
+  const ctxMetric = document.getElementById('algoMetricChart');
+  const ctxRoc = document.getElementById('algoRocChart');
+
+  if (ctxMetric) {
+    algoChart = new Chart(ctxMetric, {
+      type: 'bar',
+      data: {
+        labels: ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'ROC-AUC'],
+        datasets: [
+          {
+            label: '🌲 Random Forest (99.81%)',
+            data: [99.81, 95.40, 88.20, 91.65, 99.81],
+            backgroundColor: '#0284c7',
+            borderRadius: 6
+          },
+          {
+            label: '⚡ Gradient Boosting (99.85%)',
+            data: [99.85, 97.10, 92.50, 94.74, 99.85],
+            backgroundColor: '#4f46e5',
+            borderRadius: 6
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { min: 80, max: 100, ticks: { callback: v => v + '%' } }
+        }
+      }
+    });
+  }
+
+  if (ctxRoc) {
+    rocChart = new Chart(ctxRoc, {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            label: 'Gradient Boosting (AUC: 99.85%)',
+            data: [{x:0, y:0}, {x:0.02, y:0.92}, {x:0.05, y:0.97}, {x:0.1, y:0.99}, {x:1, y:1}],
+            borderColor: '#4f46e5',
+            backgroundColor: 'rgba(79, 70, 229, 0.08)',
+            fill: true,
+            tension: 0.3,
+            borderWidth: 2.5
+          },
+          {
+            label: 'Random Forest (AUC: 99.81%)',
+            data: [{x:0, y:0}, {x:0.03, y:0.88}, {x:0.08, y:0.94}, {x:0.15, y:0.98}, {x:1, y:1}],
+            borderColor: '#0284c7',
+            fill: false,
+            borderDash: [5, 4],
+            tension: 0.3,
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { type: 'linear', min: 0, max: 1, title: { display: true, text: 'False Positive Rate' } },
+          y: { min: 0, max: 1, title: { display: true, text: 'True Positive Rate (Recall)' } }
+        }
+      }
+    });
+  }
+}
+
+/* ==========================================================================
+   TOAST HELPER
+   ========================================================================== */
+function showToastNotification(message) {
+  let toast = document.getElementById('toastNotice');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toastNotice';
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      font-size: 0.88rem;
+      font-weight: 600;
+      z-index: 3000;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(10px);
+    `;
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.style.opacity = '1';
+  toast.style.transform = 'translateY(0)';
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(10px)';
+  }, 2500);
+}

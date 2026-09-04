@@ -1,0 +1,181 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 520" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="navGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f2b48"/>
+      <stop offset="50%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f8fafc"/>
+    </linearGradient>
+    <linearGradient id="rfGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="gbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#4338ca"/>
+    </linearGradient>
+    <linearGradient id="fraudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
+    <linearGradient id="legitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    
+    <!-- Filter for soft shadow -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+    <filter id="glowBlue" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#2563eb" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Clean Canvas Background -->
+  <rect width="1100" height="520" fill="#ffffff" rx="12"/>
+  <rect x="1" y="1" width="1098" height="518" fill="none" stroke="#e2e8f0" stroke-width="2" rx="12"/>
+
+  <!-- Top Decorative Header Bar -->
+  <rect x="0" y="0" width="1100" height="12" fill="url(#navGrad)" rx="6"/>
+
+  <!-- Title & Subtitle -->
+  <text x="550" y="48" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="700" fill="#0f2b48">
+    CREDIT CARD FRAUD DETECTION — SYSTEM ARCHITECTURE PIPELINE
+  </text>
+  <text x="550" y="72" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="500" fill="#64748b">
+    Dual Ensemble Model Engine (Random Forest &amp; Gradient Boosting) with Standardized PCA Features &amp; Threshold Discrimination
+  </text>
+
+  <!-- Step 1: Historical Data & Input -->
+  <g transform="translate(40, 110)">
+    <rect width="180" height="240" rx="10" fill="url(#cardGrad)" stroke="#cbd5e1" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect width="180" height="36" rx="10" fill="#0f2b48"/>
+    <rect y="26" width="180" height="10" fill="#0f2b48"/>
+    <text x="90" y="23" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#ffffff">1. DATA INGESTION</text>
+    
+    <circle cx="90" cy="72" r="22" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+    <path d="M78 68 L90 60 L102 68 L102 80 L90 88 L78 80 Z" fill="none" stroke="#2563eb" stroke-width="2"/>
+    
+    <text x="90" y="112" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#1e293b">ULB / Kaggle Dataset</text>
+    <text x="90" y="132" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">• 284,807 Transactions</text>
+    <text x="90" y="148" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">• 492 Fraud (0.17%)</text>
+    <text x="90" y="164" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#64748b">• 30 Numerical Features</text>
+    
+    <rect x="15" y="182" width="150" height="42" rx="6" fill="#f1f5f9" stroke="#e2e8f0"/>
+    <text x="90" y="198" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="#334155">Features Matrix:</text>
+    <text x="90" y="214" text-anchor="middle" font-family="monospace" font-size="10" fill="#2563eb">Time, V1..V28, Amount</text>
+  </g>
+
+  <!-- Arrow 1 -> 2 -->
+  <g transform="translate(220, 220)">
+    <line x1="0" y1="0" x2="35" y2="0" stroke="#3b82f6" stroke-width="3" stroke-dasharray="4,3"/>
+    <polygon points="35,-5 45,0 35,5" fill="#3b82f6"/>
+  </g>
+
+  <!-- Step 2: Preprocessing & Imbalance Handling -->
+  <g transform="translate(265, 110)">
+    <rect width="190" height="240" rx="10" fill="url(#cardGrad)" stroke="#cbd5e1" stroke-width="1.5" filter="url(#shadow)"/>
+    <rect width="190" height="36" rx="10" fill="#1e40af"/>
+    <rect y="26" width="190" height="10" fill="#1e40af"/>
+    <text x="95" y="23" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#ffffff">2. PREPROCESSING</text>
+    
+    <circle cx="95" cy="72" r="22" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+    <path d="M85 72 L92 79 L105 65" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+    
+    <text x="95" y="112" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="600" fill="#1e293b">Data Preparation</text>
+    
+    <rect x="15" y="125" width="160" height="30" rx="5" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="95" y="144" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="500" fill="#334155">StandardScaler Transformation</text>
+    
+    <rect x="15" y="162" width="160" height="30" rx="5" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="95" y="181" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="500" fill="#334155">Class Weight Calibration</text>
+    
+    <rect x="15" y="199" width="160" height="30" rx="5" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="95" y="218" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="500" fill="#334155">Stratified 80/20 Split</text>
+  </g>
+
+  <!-- Arrow 2 -> 3 -->
+  <g transform="translate(455, 220)">
+    <line x1="0" y1="0" x2="35" y2="0" stroke="#3b82f6" stroke-width="3" stroke-dasharray="4,3"/>
+    <polygon points="35,-5 45,0 35,5" fill="#3b82f6"/>
+  </g>
+
+  <!-- Step 3: ML Models Comparison -->
+  <g transform="translate(500, 95)">
+    <rect width="260" height="270" rx="10" fill="url(#cardGrad)" stroke="#3b82f6" stroke-width="2" filter="url(#shadow)"/>
+    <rect width="260" height="36" rx="10" fill="url(#navGrad)"/>
+    <rect y="26" width="260" height="10" fill="url(#navGrad)"/>
+    <text x="130" y="23" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#ffffff">3. ML ALGORITHMS</text>
+    
+    <!-- Model A: Random Forest -->
+    <g transform="translate(15, 50)">
+      <rect width="230" height="92" rx="8" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.2"/>
+      <rect x="8" y="8" width="6" height="76" rx="3" fill="#0284c7"/>
+      <text x="24" y="26" font-family="sans-serif" font-size="13" font-weight="700" fill="#0369a1">🌲 Random Forest</text>
+      <text x="24" y="44" font-family="sans-serif" font-size="11" fill="#475569">• 100 Balanced Decision Trees</text>
+      <text x="24" y="60" font-family="sans-serif" font-size="11" fill="#475569">• Bagging + Random Subspace</text>
+      <text x="24" y="78" font-family="sans-serif" font-size="11" font-weight="600" fill="#0284c7">ROC-AUC: ~99.4% | Rec: ~92%</text>
+    </g>
+
+    <!-- Model B: Gradient Boosting -->
+    <g transform="translate(15, 155)">
+      <rect width="230" height="92" rx="8" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.2"/>
+      <rect x="8" y="8" width="6" height="76" rx="3" fill="#4f46e5"/>
+      <text x="24" y="26" font-family="sans-serif" font-size="13" font-weight="700" fill="#4338ca">⚡ Gradient Boosting</text>
+      <text x="24" y="44" font-family="sans-serif" font-size="11" fill="#475569">• Sequential Error Boosting</text>
+      <text x="24" y="60" font-family="sans-serif" font-size="11" fill="#475569">• Learning Rate: 0.1, Depth: 5</text>
+      <text x="24" y="78" font-family="sans-serif" font-size="11" font-weight="600" fill="#4f46e5">ROC-AUC: ~99.8% | Rec: ~94%</text>
+    </g>
+  </g>
+
+  <!-- Arrow 3 -> 4 (Splits to Fraud / Legit) -->
+  <g transform="translate(760, 220)">
+    <line x1="0" y1="0" x2="35" y2="0" stroke="#3b82f6" stroke-width="3"/>
+    <polygon points="35,-5 45,0 35,5" fill="#3b82f6"/>
+  </g>
+
+  <!-- Step 4: Decision Threshold & Result -->
+  <g transform="translate(805, 80)">
+    <!-- Decision Box -->
+    <rect width="250" height="70" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="125" y="26" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#0f172a">Decision Threshold (τ = 0.50)</text>
+    <text x="125" y="46" text-anchor="middle" font-family="monospace" font-size="11" fill="#2563eb">P(Fraud) = Model.predict_proba()</text>
+
+    <!-- Branch Up: Fraud -->
+    <path d="M 125,70 L 125,95 L 30,95 L 30,110" fill="none" stroke="#ef4444" stroke-width="2.5"/>
+    <polygon points="25,110 35,110 30,118" fill="#ef4444"/>
+
+    <g transform="translate(0, 120)">
+      <rect width="250" height="78" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2" filter="url(#shadow)"/>
+      <rect width="8" height="78" rx="4" fill="#ef4444"/>
+      <text x="24" y="24" font-family="sans-serif" font-size="14" font-weight="800" fill="#dc2626">🚨 FRAUDULENT (1)</text>
+      <text x="24" y="44" font-family="sans-serif" font-size="11" font-weight="600" fill="#991b1b">P(Fraud) &gt;= 0.50 (e.g. 96.4%)</text>
+      <text x="24" y="62" font-family="sans-serif" font-size="11" fill="#7f1d1d">• Block Card &amp; Dispatch SMS Alert</text>
+    </g>
+
+    <!-- Branch Down: Legitimate -->
+    <path d="M 125,70 L 125,95 L 220,95 L 220,210" fill="none" stroke="#10b981" stroke-width="2.5"/>
+    <polygon points="215,210 225,210 220,218" fill="#10b981"/>
+
+    <g transform="translate(0, 220)">
+      <rect width="250" height="78" rx="8" fill="#f0fdf4" stroke="#10b981" stroke-width="2" filter="url(#shadow)"/>
+      <rect width="8" height="78" rx="4" fill="#10b981"/>
+      <text x="24" y="24" font-family="sans-serif" font-size="14" font-weight="800" fill="#059669">🛡️ LEGITIMATE / SAFE (0)</text>
+      <text x="24" y="44" font-family="sans-serif" font-size="11" font-weight="600" fill="#065f46">P(Fraud) &lt; 0.50 (e.g. 1.8%)</text>
+      <text x="24" y="62" font-family="sans-serif" font-size="11" fill="#064e3b">• Transaction Approved Instantly</text>
+    </g>
+  </g>
+
+  <!-- Bottom Info Footer Strip -->
+  <g transform="translate(40, 415)">
+    <rect width="1020" height="75" rx="8" fill="#0f2b48"/>
+    <text x="25" y="30" font-family="sans-serif" font-size="13" font-weight="700" fill="#38bdf8">CREDIT CARD FRAUD DETECTION RESEARCH PROJECT</text>
+    <text x="25" y="52" font-family="sans-serif" font-size="11" fill="#cbd5e1">Team Leader: <tspan font-weight="700" fill="#ffffff">Ambati Venkatesh</tspan> | Members: <tspan font-weight="700" fill="#ffffff">Mallapuram Venkatarao, Nunavath Ramesh, Vineeth</tspan></text>
+    <text x="995" y="42" text-anchor="end" font-family="sans-serif" font-size="12" font-weight="600" fill="#93c5fd">📍 Vadodara, Gujarat</text>
+  </g>
+</svg>
