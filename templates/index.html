@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Credit Card Fraud Detection | Single Model &amp; Public Protection Engine</title>
+  <title>Credit Card Fraud Detection | Dual ML Engine &amp; Audio Buzzer</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💳</text></svg>">
@@ -169,28 +169,28 @@
 
     /* POSITIVE & NEGATIVE BUZZER BADGES */
     .buzzer-box {
-      border-radius: 12px;
-      padding: 1.25rem;
+      border-radius: 14px;
+      padding: 1.5rem;
       margin-top: 1rem;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 1.25rem;
       animation: pulseBuzzer 2s infinite ease-in-out;
     }
 
     .buzzer-positive {
-      background: #dcfce7;
+      background: linear-gradient(135deg, #dcfce7 0%, #f0fdf4 100%);
       border: 2px solid #22c55e;
       color: #15803d;
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+      box-shadow: 0 0 25px rgba(34, 197, 94, 0.3);
     }
 
     .buzzer-negative {
-      background: #fee2e2;
+      background: linear-gradient(135deg, #fee2e2 0%, #fff1f2 100%);
       border: 2px solid #ef4444;
       color: #b91c1c;
-      box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+      box-shadow: 0 0 30px rgba(239, 68, 68, 0.45);
     }
 
     @keyframes pulseBuzzer {
@@ -241,7 +241,7 @@
         <span style="font-size: 1.6rem;">💳</span>
         <div>
           <div style="font-size: 1.25rem; font-weight: 800; letter-spacing: 0.5px;">Credit Card Fraud Detection</div>
-          <div style="font-size: 0.72rem; color: #7dd3fc; font-weight: 600;">ML Security Engine • PaySim &amp; Single Model Inspection</div>
+          <div style="font-size: 0.72rem; color: #7dd3fc; font-weight: 600;">Random Forest &amp; Boosting ML Engine • Audio Buzzer</div>
         </div>
         <span class="brand-badge">PRO 2.0</span>
       </a>
@@ -292,13 +292,13 @@
     <section style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; color: #ffffff; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);">
       <div style="max-width: 600px;">
         <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 20px; padding: 4px 14px; font-size: 0.8rem; font-weight: 700; margin-bottom: 1rem;">
-          <span>🛡️</span> REAL-TIME ANOMALY &amp; FRAUD DEFENSE
+          <span>🛡️</span> REAL-TIME ANOMALY &amp; AUDIO BUZZER DEFENSE
         </div>
         <h1 style="margin: 0 0 0.75rem 0; font-size: 2.1rem; font-weight: 800; line-height: 1.2;">
           Credit Card Fraud Detection
         </h1>
         <p style="margin: 0; color: #94a3b8; font-size: 0.95rem; line-height: 1.6;">
-          Select between <b>Random Forest (99.81%)</b> or <b>Gradient Boosting (99.85%)</b> to evaluate single positive/negative fraud output, system flags ($200,000 threshold), and connected history logging.
+          Dual classification engine using <b>Random Forest (99.81%)</b> &amp; <b>Gradient Boosting (99.85%)</b> algorithms. Generates instant <b>Audio Buzzer Sound</b> on Fraud (Negative) and <b>Positive Chime Vibe</b> on Legitimate (Safe) transactions.
         </p>
       </div>
 
@@ -309,13 +309,13 @@
     </section>
 
     <!-- ========================================================================
-         1. PLATFORM SECTION (SINGLE MODEL SELECTION & INPUTS)
+         1. PLATFORM SECTION (DUAL MODEL & INPUTS)
          ======================================================================== -->
     <section id="platformSection">
       <div class="section-header">
         <div>
           <h2 class="section-title"><span>🔍</span> Transaction Fraud Detection Platform</h2>
-          <p class="section-subtitle">Select your Machine Learning Algorithm to analyze single fraud output score and accuracy.</p>
+          <p class="section-subtitle">Enter transaction features to analyze outputs using Random Forest and Boosting algorithms with audio buzzer feedback.</p>
         </div>
       </div>
 
@@ -330,15 +330,15 @@
 
           <form id="fraudForm">
             
-            <!-- SINGLE ALGORITHM SELECTOR TOOL -->
+            <!-- ALGORITHM EVALUATION MODE -->
             <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 1rem; margin-bottom: 1.25rem;">
               <label for="select_AlgorithmMode" style="display: block; font-weight: 800; color: #0369a1; margin-bottom: 0.5rem;">
-                🧠 Select Algorithm to Analyze (Single Model Output):
+                🧠 Machine Learning Classification Engine:
               </label>
               <select id="select_AlgorithmMode" class="select-custom" style="width: 100%; padding: 0.75rem; font-weight: 700; border-color: #0284c7;">
-                <option value="random_forest" selected>🌲 Random Forest Classifier (Single Analysis - 99.81% Accuracy)</option>
+                <option value="both" selected>🧠 Both Random Forest &amp; Gradient Boosting (Dual Evaluation)</option>
+                <option value="random_forest">🌲 Random Forest Classifier (Single Analysis - 99.81% Accuracy)</option>
                 <option value="gradient_boosting">⚡ Gradient Boosting Classifier (Single Analysis - 99.85% Accuracy)</option>
-                <option value="ensemble_both">🧠 Dual Model Consensus (Both Models Combined)</option>
               </select>
             </div>
 
@@ -434,19 +434,19 @@
             </div>
 
             <button type="submit" id="detectBtn" class="btn-detect" style="width: 100%; padding: 0.95rem; font-size: 1.05rem;">
-              ⚡ ANALYZE FRAUD WITH SELECTED MODEL
+              ⚡ DETECT TRANSACTION FRAUD STATUS
             </button>
           </form>
 
         </div>
 
-        <!-- Right Panel: Single Summary Output & Buzzer Result -->
+        <!-- Right Panel: Result Panel with Buzzer Alert & Both Model Outputs -->
         <div class="result-panel" id="resultPanel">
           <div class="result-placeholder" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 2rem; text-align: center;">
             <div class="placeholder-icon" style="font-size: 3rem; margin-bottom: 0.75rem;">🛡️</div>
             <div class="placeholder-text" style="font-size: 1.2rem; font-weight: 800; color: #0f172a;">Ready for Transaction Inspection</div>
             <div class="placeholder-sub" style="color: #64748b; margin-top: 0.5rem;">
-              Select an algorithm on the left (e.g. <b>Random Forest</b> or <b>Gradient Boosting</b>) and click <b>"ANALYZE FRAUD WITH SELECTED MODEL"</b> to see single positive/negative result.
+              Fill in the <b>Input Features of The Transaction</b> on the left and click <b>"DETECT TRANSACTION FRAUD STATUS"</b>.
             </div>
           </div>
         </div>
@@ -582,7 +582,7 @@
     </section>
 
     <!-- ========================================================================
-         5. HOW IT HELPS THE PUBLIC & HOW TO STOP FRAUDS (PRACTICAL DIAGRAMS)
+         5. HOW IT HELPS THE PUBLIC & HOW TO STOP FRAUDS
          ======================================================================== -->
     <section id="publicProtectionSection" style="margin-top: 3.5rem; margin-bottom: 3.5rem;">
       <div class="section-header">
@@ -694,7 +694,7 @@
         <div class="about-text-content">
           <h4>Project Summary</h4>
           <p>
-            An advanced single-model and ensemble fraud detection platform engineered with <b>Random Forest Classifier</b> and <b>Gradient Boosting (Boosting)</b> to identify fraudulent financial transactions in real-time.
+            An advanced dual-model fraud detection platform engineered with <b>Random Forest Classifier</b> and <b>Gradient Boosting (Boosting)</b> to identify fraudulent financial transactions in real-time.
           </p>
         </div>
 
@@ -712,7 +712,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <div>Developed in <b>Vadodara, Gujarat</b> • Single Model Analysis Edition</div>
+        <div>Developed in <b>Vadodara, Gujarat</b> • Audio Buzzer &amp; Dual Model Engine</div>
         <div>Running on Localhost: <code>http://127.0.0.1:5000</code></div>
       </div>
     </div>
