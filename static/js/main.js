@@ -236,7 +236,7 @@ async function handlePredictionSubmit(e) {
     }
 
     const result = await response.json();
-    renderPredictionResult(result, selectedAlgoMode);
+    renderPredictionResult(result);
     loadHistoryLog(); // Refresh History Table immediately
   } catch (err) {
     console.error('Prediction failed:', err);
@@ -251,38 +251,30 @@ async function handlePredictionSubmit(e) {
   }
 }
 
-function renderPredictionResult(res, selectedAlgoMode) {
+function renderPredictionResult(res) {
   const resultPanel = document.getElementById('resultPanel');
   const rf = res.random_forest;
   const gb = res.gradient_boosting;
+  const isFraud = res.is_fraud;
+  const avgPct = res.history_record ? res.history_record.avg_fraud_percentage : Math.round(((rf.fraud_percentage + gb.fraud_percentage) / 2) * 100) / 100;
 
-  let isFraud = false;
   let statusTitle = "";
   let statusDesc = "";
-
-  if (selectedAlgoMode === 'random_forest') {
-    isFraud = rf.is_fraud;
-  } else if (selectedAlgoMode === 'gradient_boosting') {
-    isFraud = gb.is_fraud;
-  } else {
-    isFraud = res.is_fraud;
-  }
 
   // Play Web Audio API Sound Trigger
   if (isFraud) {
     playFraudBuzzerSound();
-    statusTitle = "NEGATIVE: FRAUD DETECTED - SECURITY ALERT!";
-    statusDesc = "Anomalous transaction risk pattern identified. Automatic card freeze and OTP verification dispatched.";
+    statusTitle = "🔴 NEGATIVE: FRAUD DETECTED - SECURITY ALERT!";
+    statusDesc = "Anomalous transaction risk pattern identified across Random Forest & Boosting models. Automatic card freeze dispatched.";
   } else {
     playPositiveChimeSound();
-    statusTitle = "POSITIVE: LEGITIMATE TRANSACTION - SAFE (APPROVED)";
-    statusDesc = "Transaction conforms to normal cardholder behavior. Low risk score below threshold.";
+    statusTitle = "🟢 POSITIVE: LEGITIMATE TRANSACTION - SAFE (APPROVED)";
+    statusDesc = "Transaction conforms to normal cardholder behavior. Low risk score below threshold across Random Forest & Boosting models.";
   }
 
   const buzzerClass = isFraud ? 'buzzer-negative' : 'buzzer-positive';
-  const buzzerIcon = isFraud ? '🔴 🚨' : '🟢 🛡️';
 
-  // Formatted Summary Text Block (Exact layout from Image 2)
+  // Formatted Summary Text Block (Exact layout matching requirements)
   const summaryText = 
 `Sender ID: ${res.sender_id}
 Receiver ID: ${res.receiver_id}
@@ -295,94 +287,54 @@ Receiver ID: ${res.receiver_id}
 7. Receipient Balance After Transaction: $${parseFloat(res.recipient_balance_after).toFixed(2)}
 8. System Flag Fraud Status(Transaction amount greater than $200000): ${res.system_flag}`;
 
-  let modelDetailsHtml = '';
-
-  if (selectedAlgoMode === 'random_forest') {
-    modelDetailsHtml = `
-      <div style="background: #f0f9ff; border: 1px solid #7dd3fc; border-radius: 10px; padding: 1rem; margin-top: 1rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-          <span style="font-weight: 800; color: #0369a1;">🌲 Random Forest Classifier</span>
-          <span style="background: #0284c7; color: #ffffff; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">99.81% Model Accuracy</span>
-        </div>
-        <div style="font-size: 1.1rem; font-weight: 800; color: ${rf.is_fraud ? '#dc2626' : '#16a34a'}; margin-bottom: 0.3rem;">
-          ${rf.is_fraud ? '🔴 FRAUDULENT TRANSACTION' : '🟢 LEGITIMATE (SAFE)'} — ${rf.fraud_percentage}% Fraud Risk
-        </div>
-        <div class="progress-track" style="height: 10px;">
-          <div class="progress-fill ${rf.is_fraud ? 'progress-fraud' : 'progress-legit'}" style="width: ${rf.fraud_percentage}%;"></div>
-        </div>
-      </div>
-    `;
-  } else if (selectedAlgoMode === 'gradient_boosting') {
-    modelDetailsHtml = `
-      <div style="background: #f5f3ff; border: 1px solid #c4b5fd; border-radius: 10px; padding: 1rem; margin-top: 1rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-          <span style="font-weight: 800; color: #5b21b6;">⚡ Gradient Boosting Classifier</span>
-          <span style="background: #4f46e5; color: #ffffff; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">99.85% Accuracy Lead</span>
-        </div>
-        <div style="font-size: 1.1rem; font-weight: 800; color: ${gb.is_fraud ? '#dc2626' : '#16a34a'}; margin-bottom: 0.3rem;">
-          ${gb.is_fraud ? '🔴 FRAUDULENT TRANSACTION' : '🟢 LEGITIMATE (SAFE)'} — ${gb.fraud_percentage}% Fraud Risk
-        </div>
-        <div class="progress-track" style="height: 10px;">
-          <div class="progress-fill ${gb.is_fraud ? 'progress-fraud' : 'progress-legit'}" style="width: ${gb.fraud_percentage}%;"></div>
-        </div>
-      </div>
-    `;
-  } else {
-    // Both Models Displayed Side-by-Side
-    modelDetailsHtml = `
-      <!-- Most Accurate Algorithm Lead Badge -->
-      <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 0.75rem 1rem; margin-top: 1rem; color: #166534; font-size: 0.88rem; font-weight: 700;">
-        🏆 Most Accurate Algorithm Lead: <span>${res.most_accurate_algorithm}</span>
+  // Combined Single Ensemble Output Card (No separate RF and Boosting split)
+  const combinedModelHtml = `
+    <!-- Combined Model Consensus Badge -->
+    <div style="background: ${isFraud ? '#fef2f2' : '#f0fdf4'}; border: 1px solid ${isFraud ? '#fca5a5' : '#86efac'}; border-radius: 12px; padding: 1.25rem; margin-top: 1.25rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+        <span style="font-weight: 800; color: ${isFraud ? '#991b1b' : '#166534'}; font-size: 1rem;">
+          🤖 Combined ML Model Decision (Random Forest 99.81% &amp; Gradient Boosting 99.85%)
+        </span>
+        <span style="background: ${isFraud ? '#dc2626' : '#16a34a'}; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 800;">
+          ${res.risk_tier}
+        </span>
       </div>
 
-      <!-- Both Models Classification Breakdown -->
-      <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
-        
-        <!-- Random Forest Result -->
-        <div class="probability-meter-box" style="margin-bottom: 0;">
-          <div class="meter-header">
-            <span class="meter-title">🌲 <b>Random Forest Algorithm (99.81% Accuracy)</b></span>
-            <span class="meter-score" style="color: ${rf.is_fraud ? '#dc2626' : '#16a34a'}; font-weight: 800;">
-              ${rf.is_fraud ? '🔴 FRAUD' : '🟢 SAFE'} (${rf.fraud_percentage}%)
-            </span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill ${rf.is_fraud ? 'progress-fraud' : 'progress-legit'}" style="width: ${rf.fraud_percentage}%;"></div>
-          </div>
-        </div>
-
-        <!-- Boosting Result -->
-        <div class="probability-meter-box" style="margin-bottom: 0;">
-          <div class="meter-header">
-            <span class="meter-title">⚡ <b>Gradient Boosting Algorithm (99.85% Accuracy)</b></span>
-            <span class="meter-score" style="color: ${gb.is_fraud ? '#dc2626' : '#16a34a'}; font-weight: 800;">
-              ${gb.is_fraud ? '🔴 FRAUD' : '🟢 SAFE'} (${gb.fraud_percentage}%)
-            </span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill ${gb.is_fraud ? 'progress-fraud' : 'progress-legit'}" style="width: ${gb.fraud_percentage}%;"></div>
-          </div>
-        </div>
-
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+        <span style="font-size: 1.15rem; font-weight: 800; color: ${isFraud ? '#dc2626' : '#16a34a'};">
+          ${isFraud ? '🔴 FRAUDULENT RISK SCORE' : '🟢 LEGITIMATE CONFIDENCE SCORE'}: <b>${avgPct}%</b>
+        </span>
+        <span style="font-size: 0.85rem; color: #64748b; font-weight: 600;">
+          Combined Accuracy Consensus
+        </span>
       </div>
-    `;
-  }
+
+      <!-- Single Progress Bar -->
+      <div class="progress-track" style="height: 14px; background: #e2e8f0; border-radius: 10px; overflow: hidden;">
+        <div class="progress-fill" style="width: ${avgPct}%; height: 100%; background: ${isFraud ? 'linear-gradient(90deg, #ef4444, #b91c1c)' : 'linear-gradient(90deg, #22c55e, #15803d)'}; transition: width 0.6s ease;"></div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; font-weight: 600;">
+        <span>Random Forest: <b>${rf.fraud_percentage}%</b></span>
+        <span>Gradient Boosting Lead: <b>${gb.fraud_percentage}%</b></span>
+      </div>
+    </div>
+  `;
 
   resultPanel.innerHTML = `
     <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
       
-      <!-- Buzzer Alert Badge (Positive/Negative) -->
+      <!-- Single Buzzer Alert Badge (Positive/Negative) -->
       <div class="buzzer-box ${buzzerClass}">
-        <div style="font-size: 2.2rem;">${buzzerIcon}</div>
         <div>
-          <div style="font-size: 1.1rem; font-weight: 800;">${statusTitle}</div>
-          <div style="font-size: 0.85rem; font-weight: 500; opacity: 0.9; margin-top: 0.2rem;">
+          <div style="font-size: 1.15rem; font-weight: 800;">${statusTitle}</div>
+          <div style="font-size: 0.88rem; font-weight: 500; opacity: 0.95; margin-top: 0.3rem;">
             ${statusDesc}
           </div>
         </div>
       </div>
 
-      ${modelDetailsHtml}
+      ${combinedModelHtml}
 
       <!-- Formatted Summary Code Block -->
       <div style="margin-top: 1.25rem;">

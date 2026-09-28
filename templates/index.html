@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Credit Card Fraud Detection | Dual ML Engine &amp; Audio Buzzer</title>
+  <title>Credit Card Fraud Detection | ML Combined Security Engine</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💳</text></svg>">
@@ -241,7 +241,7 @@
         <span style="font-size: 1.6rem;">💳</span>
         <div>
           <div style="font-size: 1.25rem; font-weight: 800; letter-spacing: 0.5px;">Credit Card Fraud Detection</div>
-          <div style="font-size: 0.72rem; color: #7dd3fc; font-weight: 600;">Random Forest &amp; Boosting ML Engine • Audio Buzzer</div>
+          <div style="font-size: 0.72rem; color: #7dd3fc; font-weight: 600;">Combined Random Forest &amp; Boosting ML Security Engine</div>
         </div>
         <span class="brand-badge">PRO 2.0</span>
       </a>
@@ -292,13 +292,13 @@
     <section style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 2rem; color: #ffffff; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);">
       <div style="max-width: 600px;">
         <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 20px; padding: 4px 14px; font-size: 0.8rem; font-weight: 700; margin-bottom: 1rem;">
-          <span>🛡️</span> REAL-TIME ANOMALY &amp; AUDIO BUZZER DEFENSE
+          <span>🛡️</span> REAL-TIME COMBINED ML FRAUD DETECTION ENGINE
         </div>
         <h1 style="margin: 0 0 0.75rem 0; font-size: 2.1rem; font-weight: 800; line-height: 1.2;">
           Credit Card Fraud Detection
         </h1>
         <p style="margin: 0; color: #94a3b8; font-size: 0.95rem; line-height: 1.6;">
-          Dual classification engine using <b>Random Forest (99.81%)</b> &amp; <b>Gradient Boosting (99.85%)</b> algorithms. Generates instant <b>Audio Buzzer Sound</b> on Fraud (Negative) and <b>Positive Chime Vibe</b> on Legitimate (Safe) transactions.
+          Enter transaction details to evaluate single combined positive/negative result using <b>Random Forest (99.81%)</b> &amp; <b>Gradient Boosting (99.85%)</b> algorithms with audio buzzer feedback.
         </p>
       </div>
 
@@ -309,13 +309,13 @@
     </section>
 
     <!-- ========================================================================
-         1. PLATFORM SECTION (DUAL MODEL & INPUTS)
+         1. PLATFORM SECTION (COMBINED MODEL EVALUATION & INPUTS)
          ======================================================================== -->
     <section id="platformSection">
       <div class="section-header">
         <div>
           <h2 class="section-title"><span>🔍</span> Transaction Fraud Detection Platform</h2>
-          <p class="section-subtitle">Enter transaction features to analyze outputs using Random Forest and Boosting algorithms with audio buzzer feedback.</p>
+          <p class="section-subtitle">Fill in the input features of the transaction to evaluate combined single positive or negative result.</p>
         </div>
       </div>
 
@@ -330,24 +330,12 @@
 
           <form id="fraudForm">
             
-            <!-- ALGORITHM EVALUATION MODE -->
-            <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 1rem; margin-bottom: 1.25rem;">
-              <label for="select_AlgorithmMode" style="display: block; font-weight: 800; color: #0369a1; margin-bottom: 0.5rem;">
-                🧠 Machine Learning Classification Engine:
-              </label>
-              <select id="select_AlgorithmMode" class="select-custom" style="width: 100%; padding: 0.75rem; font-weight: 700; border-color: #0284c7;">
-                <option value="both" selected>🧠 Both Random Forest &amp; Gradient Boosting (Dual Evaluation)</option>
-                <option value="random_forest">🌲 Random Forest Classifier (Single Analysis - 99.81% Accuracy)</option>
-                <option value="gradient_boosting">⚡ Gradient Boosting Classifier (Single Analysis - 99.85% Accuracy)</option>
-              </select>
-            </div>
-
             <!-- Sender ID -->
             <div style="margin-bottom: 1.1rem;">
               <label for="input_SenderID" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
                 Input Sender ID
               </label>
-              <input type="text" id="input_SenderID" class="input-field" placeholder="e.g. C109845210" value="C109845210" required style="width: 100%; border-color: #f87171;">
+              <input type="text" id="input_SenderID" class="input-field" placeholder="e.g. C109845210" value="" required style="width: 100%; border-color: #cbd5e1;">
             </div>
 
             <!-- Receiver ID -->
@@ -355,15 +343,15 @@
               <label for="input_ReceiverID" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
                 Input Receiver ID
               </label>
-              <input type="text" id="input_ReceiverID" class="input-field" placeholder="e.g. M849201948" value="M849201948" required style="width: 100%;">
+              <input type="text" id="input_ReceiverID" class="input-field" placeholder="e.g. M849201948" value="" required style="width: 100%;">
             </div>
 
             <!-- Hours Slider -->
             <div style="margin-bottom: 1.25rem;">
               <label for="input_Hours" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
-                Number of Hours it took the Transaction to complete: <span id="hoursVal" style="color: #ef4444; font-weight: 800;">2</span>
+                Number of Hours it took the Transaction to complete: <span id="hoursVal" style="color: #0284c7; font-weight: 800;">0</span>
               </label>
-              <input type="range" id="input_Hours" min="0" max="720" value="2" style="width: 100%; accent-color: #ef4444;">
+              <input type="range" id="input_Hours" min="0" max="720" value="0" style="width: 100%; accent-color: #0284c7;">
             </div>
 
             <!-- Type of Transfer Made -->
@@ -388,7 +376,7 @@
               <label for="input_Amount" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
                 Amount in $
               </label>
-              <input type="number" id="input_Amount" class="input-field" step="0.01" value="64.50" required style="width: 100%;">
+              <input type="number" id="input_Amount" class="input-field" step="0.01" value="" placeholder="e.g. 150.00" required style="width: 100%;">
             </div>
 
             <!-- Sender Balance Before -->
@@ -396,7 +384,7 @@
               <label for="input_SenderBalBefore" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
                 Sender Balance Before Transaction was made
               </label>
-              <input type="number" id="input_SenderBalBefore" class="input-field" step="0.01" value="2500.00" required style="width: 100%;">
+              <input type="number" id="input_SenderBalBefore" class="input-field" step="0.01" value="" placeholder="e.g. 2500.00" required style="width: 100%;">
             </div>
 
             <!-- Sender Balance After -->
@@ -404,7 +392,7 @@
               <label for="input_SenderBalAfter" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
                 Sender Balance After Transaction was made
               </label>
-              <input type="number" id="input_SenderBalAfter" class="input-field" step="0.01" value="2435.50" required style="width: 100%;">
+              <input type="number" id="input_SenderBalAfter" class="input-field" step="0.01" value="" placeholder="e.g. 2350.00" required style="width: 100%;">
             </div>
 
             <!-- Recipient Balance Before -->
@@ -412,7 +400,7 @@
               <label for="input_RecipientBalBefore" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
                 Recipient Balance Before Transaction was made
               </label>
-              <input type="number" id="input_RecipientBalBefore" class="input-field" step="0.01" value="0.00" required style="width: 100%;">
+              <input type="number" id="input_RecipientBalBefore" class="input-field" step="0.01" value="" placeholder="e.g. 0.00" required style="width: 100%;">
             </div>
 
             <!-- Recipient Balance After -->
@@ -420,17 +408,7 @@
               <label for="input_RecipientBalAfter" style="display: block; font-weight: 700; color: #334155; margin-bottom: 0.4rem;">
                 Recipient Balance After Transaction was made
               </label>
-              <input type="number" id="input_RecipientBalAfter" class="input-field" step="0.01" value="64.50" required style="width: 100%;">
-            </div>
-
-            <!-- 1-Click Test Presets -->
-            <div class="preset-buttons" style="margin-bottom: 1.25rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-              <button type="button" id="presetLegit" class="btn-preset preset-legit">
-                🛡️ Safe Sample ($64.50)
-              </button>
-              <button type="button" id="presetFraud" class="btn-preset preset-fraud">
-                🚨 Fraud Attack ($250,000)
-              </button>
+              <input type="number" id="input_RecipientBalAfter" class="input-field" step="0.01" value="" placeholder="e.g. 150.00" required style="width: 100%;">
             </div>
 
             <button type="submit" id="detectBtn" class="btn-detect" style="width: 100%; padding: 0.95rem; font-size: 1.05rem;">
@@ -440,13 +418,13 @@
 
         </div>
 
-        <!-- Right Panel: Result Panel with Buzzer Alert & Both Model Outputs -->
+        <!-- Right Panel: Single Combined Result Panel with Audio Buzzer -->
         <div class="result-panel" id="resultPanel">
           <div class="result-placeholder" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 2rem; text-align: center;">
             <div class="placeholder-icon" style="font-size: 3rem; margin-bottom: 0.75rem;">🛡️</div>
             <div class="placeholder-text" style="font-size: 1.2rem; font-weight: 800; color: #0f172a;">Ready for Transaction Inspection</div>
             <div class="placeholder-sub" style="color: #64748b; margin-top: 0.5rem;">
-              Fill in the <b>Input Features of The Transaction</b> on the left and click <b>"DETECT TRANSACTION FRAUD STATUS"</b>.
+              Fill in the <b>Input Features of The Transaction</b> on the left and click <b>"DETECT TRANSACTION FRAUD STATUS"</b> to generate single positive or negative preview.
             </div>
           </div>
         </div>
@@ -712,7 +690,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <div>Developed in <b>Vadodara, Gujarat</b> • Audio Buzzer &amp; Dual Model Engine</div>
+        <div>Developed in <b>Vadodara, Gujarat</b> • Audio Buzzer &amp; Combined ML Security Engine</div>
         <div>Running on Localhost: <code>http://127.0.0.1:5000</code></div>
       </div>
     </div>
