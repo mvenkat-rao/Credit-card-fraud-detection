@@ -287,36 +287,31 @@ Receiver ID: ${res.receiver_id}
 7. Receipient Balance After Transaction: $${parseFloat(res.recipient_balance_after).toFixed(2)}
 8. System Flag Fraud Status(Transaction amount greater than $200000): ${res.system_flag}`;
 
-  // Combined Single Ensemble Output Card (No separate RF and Boosting split)
+  // Combined Single Ensemble Output Card (Pure Unified Decision)
   const combinedModelHtml = `
     <!-- Combined Model Consensus Badge -->
     <div style="background: ${isFraud ? '#fef2f2' : '#f0fdf4'}; border: 1px solid ${isFraud ? '#fca5a5' : '#86efac'}; border-radius: 12px; padding: 1.25rem; margin-top: 1.25rem;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
-        <span style="font-weight: 800; color: ${isFraud ? '#991b1b' : '#166534'}; font-size: 1rem;">
-          🤖 Combined ML Model Decision (Random Forest 99.81% &amp; Gradient Boosting 99.85%)
+        <span style="font-weight: 800; color: ${isFraud ? '#991b1b' : '#166534'}; font-size: 1.05rem;">
+          🤖 Combined Machine Learning Decision
         </span>
-        <span style="background: ${isFraud ? '#dc2626' : '#16a34a'}; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 800;">
+        <span style="background: ${isFraud ? '#dc2626' : '#16a34a'}; color: #ffffff; padding: 4px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 800;">
           ${res.risk_tier}
         </span>
       </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-        <span style="font-size: 1.15rem; font-weight: 800; color: ${isFraud ? '#dc2626' : '#16a34a'};">
-          ${isFraud ? '🔴 FRAUDULENT RISK SCORE' : '🟢 LEGITIMATE CONFIDENCE SCORE'}: <b>${avgPct}%</b>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+        <span style="font-size: 1.2rem; font-weight: 800; color: ${isFraud ? '#dc2626' : '#16a34a'};">
+          ${isFraud ? '🔴 FRAUD RISK SCORE' : '🟢 LEGITIMATE CONFIDENCE SCORE'}: <b>${avgPct}%</b>
         </span>
-        <span style="font-size: 0.85rem; color: #64748b; font-weight: 600;">
-          Combined Accuracy Consensus
+        <span style="font-size: 0.85rem; color: #64748b; font-weight: 700;">
+          Combined Ensemble Consensus
         </span>
       </div>
 
       <!-- Single Progress Bar -->
       <div class="progress-track" style="height: 14px; background: #e2e8f0; border-radius: 10px; overflow: hidden;">
         <div class="progress-fill" style="width: ${avgPct}%; height: 100%; background: ${isFraud ? 'linear-gradient(90deg, #ef4444, #b91c1c)' : 'linear-gradient(90deg, #22c55e, #15803d)'}; transition: width 0.6s ease;"></div>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; font-weight: 600;">
-        <span>Random Forest: <b>${rf.fraud_percentage}%</b></span>
-        <span>Gradient Boosting Lead: <b>${gb.fraud_percentage}%</b></span>
       </div>
     </div>
   `;
@@ -327,7 +322,7 @@ Receiver ID: ${res.receiver_id}
       <!-- Single Buzzer Alert Badge (Positive/Negative) -->
       <div class="buzzer-box ${buzzerClass}">
         <div>
-          <div style="font-size: 1.15rem; font-weight: 800;">${statusTitle}</div>
+          <div style="font-size: 1.2rem; font-weight: 800;">${statusTitle}</div>
           <div style="font-size: 0.88rem; font-weight: 500; opacity: 0.95; margin-top: 0.3rem;">
             ${statusDesc}
           </div>
@@ -364,7 +359,7 @@ async function loadHistoryLog() {
     if (history.length === 0) {
       tbody.innerHTML = `
         <tr>
-          <td colspan="11" style="text-align: center; color: #94a3b8; padding: 20px;">
+          <td colspan="10" style="text-align: center; color: #94a3b8; padding: 20px;">
             No transaction detection history recorded yet. Enter features above to log data.
           </td>
         </tr>
@@ -390,8 +385,7 @@ async function loadHistoryLog() {
         <td style="padding: 10px; font-weight: 700; text-align: center; color: ${item.system_flag === 1 ? '#dc2626' : '#16a34a'};">
           ${item.system_flag}
         </td>
-        <td style="padding: 10px; color: ${item.rf_percentage >= 50 ? '#dc2626' : '#16a34a'}; font-weight: 700;">${item.rf_percentage}%</td>
-        <td style="padding: 10px; color: ${item.gb_percentage >= 50 ? '#dc2626' : '#16a34a'}; font-weight: 700;">${item.gb_percentage}%</td>
+        <td style="padding: 10px; color: ${item.avg_fraud_percentage >= 50 ? '#dc2626' : '#16a34a'}; font-weight: 700; text-align: center;">${item.avg_fraud_percentage}%</td>
         <td style="padding: 10px;">
           <span style="display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; background: ${item.is_fraud ? '#fee2e2' : '#dcfce7'}; color: ${item.is_fraud ? '#991b1b' : '#166534'};">
             ${item.is_fraud ? '🔴 FRAUD' : '🟢 SAFE'}
